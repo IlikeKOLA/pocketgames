@@ -1,2 +1,2 @@
-hello
-TOP
+print("Steam в godot, можно скачивать программы через гитхаб!")
+input('')
