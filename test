@@ -1,2 +1,2 @@
-@echo Hello
-"Horoshego tebe dnya "
+@echo off
+set /p id="Хорошего тебя дня "
