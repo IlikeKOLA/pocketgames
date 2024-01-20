@@ -1,1 +1,2 @@
 @echo Hello
+set /p id="Хорошего тебя дня "
