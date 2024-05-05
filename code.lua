@@ -344,8 +344,9 @@ local function sortTop(event)
                     if allow_downloads_loaded and allow1 then
                         img:addEventListener("touch", function(event)
                             if event.phase == "began" then
-                                opn_game(img.name)
                                 clear_group(inf)
+                                clear_group(move_oth)
+                                opn_game(img.name)
                             end
                         end)
                     end
