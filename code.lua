@@ -30,7 +30,7 @@ function SortDowns(a, b)
     end
 end
 
-display.newRect(0,0,10000,10000):setFillColor(0.2,0.2,0.6)
+display.newRect(0,0,10000,10000):setFillColor(0.2,0.2,0.2)
 
 local scr = display.newGroup()
 local gms = display.newGroup()
