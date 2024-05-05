@@ -75,6 +75,14 @@ get(
     "https://kritireg-default-rtdb.firebaseio.com/games.json",
     function(event)
         gms_list = event
+        display.newRect(0,0,10000,10000):setFillColor(0,0.5,1)
+        local title1_stroke = display.newRoundedRect(display.contentWidth/4.5,display.contentHeight/2,display.contentWidth,display.contentHeight/10,10)
+        local title1 = display.newText("Случайные приложения",0+(display.contentWidth+display.contentHeight)/7,display.contentHeight/2)
+        title1.size = (display.contentWidth+display.contentHeight)/10
+        title1_stroke:setFillColor(1,0.6,0.3)
+        title1.size = 20
+        gms:insert(title1_stroke)
+        gms:insert(title1)
     end)
 
 local function clear_group(group)
@@ -553,14 +561,6 @@ end
 
 
 update_games = function()
-    display.newRect(0,0,10000,10000):setFillColor(0,0.5,1)
-    local title1_stroke = display.newRoundedRect(display.contentWidth/4.5,display.contentHeight/2,display.contentWidth,display.contentHeight/10,10)
-    local title1 = display.newText("Случайные приложения",0+(display.contentWidth+display.contentHeight)/7,display.contentHeight/2)
-    title1.size = (display.contentWidth+display.contentHeight)/10
-    title1_stroke:setFillColor(1,0.6,0.3)
-    title1.size = 20
-    gms:insert(title1_stroke)
-    gms:insert(title1)
 
     allow_downloads_loaded = false
     allow_loaded = true
