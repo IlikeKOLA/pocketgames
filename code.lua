@@ -29,8 +29,6 @@ function SortDowns(a, b)
     end
 end
 
-display.newRect(0,0,10000,10000):setFillColor(0,0.5,1)
-
 local scr = display.newGroup()
 local gms = display.newGroup()
 local inf = display.newGroup()
@@ -555,7 +553,7 @@ end
 
 
 update_games = function()
-
+    display.newRect(0,0,10000,10000):setFillColor(0,0.5,1)
     local title1_stroke = display.newRoundedRect(display.contentWidth/4.5,display.contentHeight/2,display.contentWidth,display.contentHeight/10,10)
     local title1 = display.newText("Случайные приложения",0+(display.contentWidth+display.contentHeight)/7,display.contentHeight/2)
     title1.size = (display.contentWidth+display.contentHeight)/10
