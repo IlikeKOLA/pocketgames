@@ -29,7 +29,7 @@ function SortDowns(a, b)
     end
 end
 
-display.newRect(0,0,10000,10000):setFillColor(0.1,0.1,0.1)
+display.newRect(0,0,10000,10000):setFillColor(0,0.5,1)
 
 local scr = display.newGroup()
 local gms = display.newGroup()
@@ -275,7 +275,7 @@ local function opn_game(game)
                 end
 
                 download_btn:addEventListener("touch",function(event)
-                    if event.phase == "ended" then
+                    if event.phase == "began" then
                        system.openURL(dad_event[game]["url"])
                        dw = display.newText("Пожалуйста, перейдите по ссылке",display.contentCenterX,display.contentHeight-200)
                         dad_event[game]["downloads"][id] = 0
@@ -344,9 +344,8 @@ local function sortTop(event)
                     if allow_downloads_loaded and allow1 then
                         img:addEventListener("touch", function(event)
                             if event.phase == "began" then
-                                clear_group(inf)
-                                clear_group(move_oth)
                                 opn_game(img.name)
+                                clear_group(inf)
                             end
                         end)
                     end
@@ -590,10 +589,16 @@ update_games = function()
             local serch = native.newTextField( display.contentWidth/1.7, display.safeScreenOriginY+30, 250,40 )
             serch.placeholder = "Поиск"
             serch.size = 15
+            local title2_stroke = display.newRoundedRect(display.contentWidth/3,display.contentHeight/4,display.contentWidth*1.3,display.contentHeight/10,10)
+            local title2 = display.newText("Сортировать по",display.contentWidth/3,display.contentHeight/4)
+            title2_stroke:setFillColor(0.8,0.5,0)
+            title2.size = (display.contentWidth+display.contentHeight)/45
+            gms:insert(title2_stroke)
+            gms:insert(title2)
 
             local bal = display.contentWidth+display.contentHeight
-            local top_src_btn = display.newRoundedRect(display.contentWidth/4, display.contentHeight/4.3, bal/9, bal/20, 9)
-            local top_scr_text = display.newText("Скачивания", display.contentWidth/4, display.contentHeight/4.3)
+            local top_src_btn = display.newRoundedRect(display.contentWidth/4, display.contentHeight/2.8, bal/9, bal/20, 9)
+            local top_scr_text = display.newText("Скачивания", display.contentWidth/4, display.contentHeight/2.8)
             top_scr_text:setFillColor(0)
             gms:insert(top_src_btn)
             gms:insert(top_scr_text)
@@ -706,10 +711,10 @@ update_games = function()
             end, "image.png".."banner", system.TemporaryDirectory)
             end)
 
-    local title1_stroke = display.newRect(display.contentCenterX,display.contentHeight/3,500,50)
-    local title1 = display.newText("Каталог приложений",120,display.contentHeight/3)
-    title1_stroke:setFillColor(0.1,0.1,0.3)
-    title1.size = 20
+    local title1_stroke = display.newRoundedRect(display.contentWidth/3,display.contentHeight/2,display.contentWidth*1.3,display.contentHeight/10,10)
+    local title1 = display.newText("Каталог приложений",display.contentWidth/3,display.contentHeight/2)
+    title1_stroke:setFillColor(0.8,0.5,0)
+    title1.size = (display.contentWidth+display.contentHeight)/45
     gms:insert(title1_stroke)
     gms:insert(title1)
 
