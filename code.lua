@@ -201,12 +201,13 @@ local function opn_game(game)
                 display.loadRemoteImage(event[game]["icon"], "GET", function (event)
                     clear_group(oth)
                     local img = event.target
-                    inf:insert(img)
-                    img.width = 100
-                    img.height = 100
-                    img.y = display.contentHeight/9
-                    img.x = display.screenOriginX+80
-
+                    if img ~= nil then
+                     inf:insert(img)
+                     img.width = 100
+                     img.height = 100
+                     img.y = display.contentHeight/9
+                     img.x = display.screenOriginX+80
+                    end
 
                     if not allow_downloads_loaded then
                         display.remove(img)
