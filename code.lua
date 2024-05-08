@@ -613,21 +613,21 @@ get(
             search(serch.text)
             print(serch.text)
             clear_group(inf)
-                    clear_group(gms)
+            gms.isVisible = false
                     local exit_btn = display.newRoundedRect(display.contentCenterX,display.actualContentWidth*1.3,150,50,10)
                     local exit_text = display.newText("Вернутся в каталог",display.contentCenterX,display.actualContentWidth*1.3)
                     oth:insert(exit_btn)
                     oth:insert(exit_text)
                     exit_text:setFillColor(0)
                     exit_btn:addEventListener("touch", function(event)
-                        allow_games = true
-                        if allow_games == true then
-                            allow_games = false
-                            inf.isVisible = false
-                            clear_group(gms)
-                            clear_group(inf)
-                            update_games()
-                            dw.text = ""
+                        if event.phase == "began" then
+                            allow_games = true
+                            if allow_games == true then
+                                allow_games = false
+                                gms.isVisible = false
+                                update_games()
+                                dw.text = ""
+                            end
                         end
                 end)
                     end
