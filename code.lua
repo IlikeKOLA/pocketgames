@@ -1,6 +1,7 @@
 local network = require("network")
 local json = require("json")
 local lfs = require("lfs")
+local widget = require("widget")
 
 local firebase_url = "https://kritireg-default-rtdb.firebaseio.com/"
 
@@ -583,6 +584,10 @@ get(
     local serch = native.newTextField( display.contentWidth/1.7, display.safeScreenOriginY+30, 250,40 )
     serch.placeholder = "Поиск"
     serch.size = 15
+    serch.hasBackground = false
+    local serch_bg = display.newRoundedRect( display.contentWidth/1.7, display.safeScreenOriginY+30, 250, 40, 10 )
+    serch_bg:setFillColor(0.1, 0.1, 0.1, 0.4)
+
     local title2_stroke = display.newRoundedRect(display.contentWidth/3,display.contentHeight/4,display.contentWidth*1.3,display.contentHeight/10,10)
     local title2 = display.newText("Сортировать по",display.contentWidth/3,display.contentHeight/4)
     title2_stroke:setFillColor(0.8,0.5,0)
