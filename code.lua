@@ -73,11 +73,6 @@ local function get(pr,callback)
 end
 
 
-get(
-    "https://kritireg-default-rtdb.firebaseio.com/games.json",
-    function(event)
-        gms_list = event
-    end)
 
 local function clear_group(group)
     while group.numChildren > 0 do
@@ -129,7 +124,7 @@ local function opn_game(game)
             allow_downloads_loaded = true
 
 
-            clear_group(gms)
+            gms.isVisible = false
             clear_group(scr)
 
             local transistor = "Неизвестный переходник"
@@ -290,9 +285,10 @@ local function opn_game(game)
                 inf:insert(exit_text)
                 exit_text:setFillColor(0)
                 exit_btn:addEventListener("touch", function(event)
+                    allow_games = true
                     if allow_games == true then
                         allow_games = false
-                        clear_group(gms)
+                        gms.isVisible = false
                         clear_group(inf)
                         update_games()
                         dw.text = ""
@@ -309,7 +305,7 @@ local function sortTop(event)
     allow1 = true
 
 
-    clear_group(gms)
+    gms.isVisible = false
     clear_group(inf)
     clear_group(prf)
 
@@ -326,7 +322,7 @@ local function sortTop(event)
 
             if game["icon"] then
                 local game = display.loadRemoteImage(game.icon, "GET", function(event)
-                    clear_group(gms)
+                    gms.isVisible = false
                     local dwns_text = display.newText(len(game.downloads) .. " Загрузок", display.contentWidth/1.15, ys[game])
                     local name_text = display.newText(game.name, display.contentWidth/2, ys[game])
                     local img = event.target
@@ -344,9 +340,8 @@ local function sortTop(event)
                     if allow_downloads_loaded and allow1 then
                         img:addEventListener("touch", function(event)
                             if event.phase == "began" then
-                                clear_group(inf)
-                                clear_group(move_oth)
                                 opn_game(img.name)
+                                clear_group(inf)
                             end
                         end)
                     end
@@ -372,7 +367,7 @@ local function sortTop(event)
     exit_btn:addEventListener("touch", function(event)
         if allow_games == true then
             allow_games = false
-            clear_group(gms)
+            gms.isVisible = false
             clear_group(inf)
             clear_group(oth)
             update_games()
@@ -389,7 +384,7 @@ local function profile()
 
     local function information()
 
-        clear_group(gms)
+        gms.isVisible = false
         clear_group(inf)
 
         local exit = display.newRoundedRect(30,30,50,50,10)
@@ -422,7 +417,7 @@ local function profile()
     profile_btn.width, profile_btn.height = 50, 50
     profile_btn:addEventListener("touch",function(event)
         if event.phase == "began" then
-                clear_group(gms)
+                gms.isVisible = false
                 update_games()
                 clear_group(prf)
                 display.remove(profile_btn)
@@ -433,7 +428,7 @@ local function profile()
 
     clear_group(scr)
     clear_group(move_oth)
-    clear_group(gms)
+    gms.isVisible = false
 
     in_profile = true
 
@@ -490,7 +485,7 @@ local function profile()
         if event.phase == "began" then
             clear_group(prf)
             information()
-            clear_group(gms)
+            gms.isVisible = false
         end
     end)
 
@@ -522,7 +517,7 @@ function search(tag)
                 if tag_find or event[i]["name"] == tag or event[i]["full_name"] == tag then
                     completes = completes + 1
                     tag_find = false
-                    clear_group(gms)
+                    gms.isVisible = false
                     display.loadRemoteImage(event[i]["icon"], "GET", function(event)
                         local img = event.target
                         img.y = y
@@ -553,68 +548,61 @@ function search(tag)
 end
 
 
-
-update_games = function()
-
-    allow_downloads_loaded = false
+get(
+    "https://kritireg-default-rtdb.firebaseio.com/games.json",
+    function(event)
+        gms_list = event
     allow_loaded = true
-    gms.isVisible = true
+    allow_downloads_loaded = false
 
-    clear_group(scr)
-    clear_group(inf)
-    clear_group(oth)
+    local profile_btn = display.newImage("images/profile.png",30,display.screenOriginY+40)
+    oth_gms:insert(profile_btn)
+    profile_btn.width, profile_btn.height = 40, 40
+    profile_btn:addEventListener("touch",function(event)
+    if event.phase == "began" then
+        profile()
+        display.remove(profile_btn)
+        profile_btn = nil
 
+        end
+    end)
+
+
+    allow_games = true
+    local x = 80
+    local y = 300
     event = gms_list
+    event = json.decode(event)
+    local dad_event = event
 
-            allow_loaded = true
-            allow_downloads_loaded = false
+    local serch = native.newTextField( display.contentWidth/1.7, display.safeScreenOriginY+30, 250,40 )
+    serch.placeholder = "Поиск"
+    serch.size = 15
+    local title2_stroke = display.newRoundedRect(display.contentWidth/3,display.contentHeight/4,display.contentWidth*1.3,display.contentHeight/10,10)
+    local title2 = display.newText("Сортировать по",display.contentWidth/3,display.contentHeight/4)
+    title2_stroke:setFillColor(0.8,0.5,0)
+    title2.size = (display.contentWidth+display.contentHeight)/45
+    gms:insert(title2_stroke)
+    gms:insert(title2)
 
-            local profile_btn = display.newImage("images/profile.png",30,display.screenOriginY+40)
-            oth_gms:insert(profile_btn)
-            profile_btn.width, profile_btn.height = 40, 40
-            profile_btn:addEventListener("touch",function(event)
-                if event.phase == "began" then
-                        profile()
-                        display.remove(profile_btn)
-                        profile_btn = nil
+    local bal = display.contentWidth+display.contentHeight
+    local top_src_btn = display.newRoundedRect(display.contentWidth/4, display.contentHeight/2.8, bal/9, bal/20, 9)
+    local top_scr_text = display.newText("Скачивания", display.contentWidth/4, display.contentHeight/2.8)
+    top_scr_text:setFillColor(0)
+    gms:insert(top_src_btn)
+    gms:insert(top_scr_text)
 
-                end
-            end)
+    top_src_btn:addEventListener("touch", function(event)
+        if event.phase == "began" then
+            sortTop(dad_event)
+        end
+    end)
 
-            allow_games = true
-            local x = 80
-            local y = 300
-            event = json.decode(event)
-            local dad_event = event
-
-            local serch = native.newTextField( display.contentWidth/1.7, display.safeScreenOriginY+30, 250,40 )
-            serch.placeholder = "Поиск"
-            serch.size = 15
-            local title2_stroke = display.newRoundedRect(display.contentWidth/3,display.contentHeight/4,display.contentWidth*1.3,display.contentHeight/10,10)
-            local title2 = display.newText("Сортировать по",display.contentWidth/3,display.contentHeight/4)
-            title2_stroke:setFillColor(0.8,0.5,0)
-            title2.size = (display.contentWidth+display.contentHeight)/45
-            gms:insert(title2_stroke)
-            gms:insert(title2)
-
-            local bal = display.contentWidth+display.contentHeight
-            local top_src_btn = display.newRoundedRect(display.contentWidth/4, display.contentHeight/2.8, bal/9, bal/20, 9)
-            local top_scr_text = display.newText("Скачивания", display.contentWidth/4, display.contentHeight/2.8)
-            top_scr_text:setFillColor(0)
-            gms:insert(top_src_btn)
-            gms:insert(top_scr_text)
-
-            top_src_btn:addEventListener("touch", function(event)
-                if event.phase == "began" then
-                    sortTop(dad_event)
-                end
-        end)
-
-            serch:addEventListener( "userInput", function( event )
-                if event.phase == "submitted" then
-                    search(serch.text)
-                    print(serch.text)
-                    clear_group(inf)
+    serch:addEventListener( "userInput", function( event )
+        if event.phase == "submitted" then
+            search(serch.text)
+            print(serch.text)
+            clear_group(inf)
                     clear_group(gms)
                     local exit_btn = display.newRoundedRect(display.contentCenterX,display.actualContentWidth*1.3,150,50,10)
                     local exit_text = display.newText("Вернутся в каталог",display.contentCenterX,display.actualContentWidth*1.3)
@@ -711,6 +699,7 @@ update_games = function()
 
             end, "image.png".."banner", system.TemporaryDirectory)
             end)
+        end)
 
     local title1_stroke = display.newRoundedRect(display.contentWidth/3,display.contentHeight/2,display.contentWidth*1.3,display.contentHeight/10,10)
     local title1 = display.newText("Каталог приложений",display.contentWidth/3,display.contentHeight/2)
@@ -719,7 +708,18 @@ update_games = function()
     gms:insert(title1_stroke)
     gms:insert(title1)
 
-        end
+
+update_games = function()
+
+    allow_downloads_loaded = false
+    allow_loaded = true
+    gms.isVisible = true
+
+    clear_group(scr)
+    clear_group(inf)
+    clear_group(oth)
+
+    end
 
 local function list(event)
     if event.phase == "ended" then
