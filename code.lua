@@ -219,8 +219,10 @@ local function opn_game(game)
 
 
                 inf.isVisible = true
-                 local download_btn = display.newRoundedRect(display.contentCenterX,display.contentHeight-100,180,80,20)
-                 local down_text = display.newText("СКАЧАТЬ",display.contentCenterX,display.contentHeight-100)
+                local balance = display.contentWidth+display.contentHeight
+                 local download_btn = display.newRoundedRect(display.contentCenterX*1.4,display.contentHeight/4,balance/5,balance/18,20)
+                 local down_text = display.newText("СКАЧАТЬ",display.contentCenterX*1.4,display.contentHeight/4)
+                 download_btn:setFillColor(0.5,1,0.5)
                  down_text:setFillColor(0,0,0)
                  inf:insert(download_btn)
                 inf:insert(down_text)
