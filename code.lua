@@ -141,17 +141,18 @@ local function opn_game(game)
             local dad_event = event
             for i in pairs(event) do
 
+                local transit = display.newText(transistor,display.screenOriginX+80,display.contentHeight/2.4)
+                inf:insert(transit)
+
+                local heght = display.newText("Вес",display.screenOriginX+80,display.contentHeight/2.2)
+                if event[game]["ves"] then
+                    heght.text = "Вес: " .. event[game]["ves"] .. " МБ"
+                else
+                    heght.text = "Вес ??? "
+                end
+
+                inf:insert(heght)
                 if moderator then
-
-                    local transit = display.newText(transistor,display.screenOriginX+80,display.contentHeight/2.4)
-                    inf:insert(transit)
-
-                    local heght = display.newText("Вес",display.screenOriginX+80,display.contentHeight/2.2)
-                    if event[game]["ves"] then
-                        heght.text = "Вес: " .. event[game]["ves"] .. " МБ"
-                    else
-                        heght.text = "Вес ??? "
-                    end
 
                     inf:insert(heght)
 
@@ -186,12 +187,12 @@ local function opn_game(game)
                 end
 
 
-                local fulname = display.newText(event[game]["full_name"],display.contentCenterX+50,display.screenOriginY+200)
-                fulname.size =  (display.contentHeight+display.contentWidth)/65
+                local fulname = display.newText(event[game]["full_name"],display.contentCenterX+50,display.screenOriginY+200,100,100)
+                fulname.size =  (display.contentHeight+display.contentWidth)/55
                 inf:insert(fulname)
 
                 if event[game]["owner"] then
-                    local owner = display.newText("Owner: "..event[game]["owner"],display.screenOriginX+80,display.contentHeight/3)
+                    local owner = display.newText("Разработчик "..event[game]["owner"],display.screenOriginX+80,display.contentHeight/3)
                     owner.size = (display.contentHeight+display.contentWidth)/65
                     inf:insert(owner)
                 end
@@ -203,7 +204,7 @@ local function opn_game(game)
                     inf:insert(img)
                     img.width = 100
                     img.height = 100
-                    img.y = display.contentHeight/5
+                    img.y = display.contentHeight/9
                     img.x = display.screenOriginX+80
 
 
@@ -335,8 +336,6 @@ local function sortTop(event)
                     img.width = 50
                     img.height = 50
                     img.name = i
-
-
                     move_oth:insert(dwns_text)
                     move_oth:insert(name_text)
                     move_oth:insert(img)
@@ -554,28 +553,27 @@ function search(tag)
 
 end
 
+local profile_btn = display.newImage("images/profile.png",30,display.screenOriginY+40)
+oth_gms:insert(profile_btn)
+profile_btn.width, profile_btn.height = 40, 40
+profile_btn:addEventListener("touch",function(event)
+if event.phase == "began" then
+    profile()
+    display.remove(profile_btn)
+    profile_btn = nil
+
+    end
+end)
+
+allow_loaded = true
+allow_downloads_loaded = false
+allow_games = true
 
 get(
     "https://kritireg-default-rtdb.firebaseio.com/games.json",
     function(event)
-        gms_list = event
-    allow_loaded = true
-    allow_downloads_loaded = false
+    gms_list = event
 
-    local profile_btn = display.newImage("images/profile.png",30,display.screenOriginY+40)
-    oth_gms:insert(profile_btn)
-    profile_btn.width, profile_btn.height = 40, 40
-    profile_btn:addEventListener("touch",function(event)
-    if event.phase == "began" then
-        profile()
-        display.remove(profile_btn)
-        profile_btn = nil
-
-        end
-    end)
-
-
-    allow_games = true
     local x = 80
     local y = 300
     event = gms_list
@@ -612,7 +610,6 @@ get(
     serch:addEventListener( "userInput", function( event )
         if event.phase == "submitted" then
             search(serch.text)
-            print(serch.text)
             clear_group(inf)
             gms.isVisible = false
                     local exit_btn = display.newRoundedRect(display.contentCenterX,display.actualContentWidth*1.3,150,50,10)
@@ -660,6 +657,7 @@ get(
                                 gms:insert(text)
                                 text.size = 10
                                 x = x + 70
+
                                 if img then
                                     gms:insert(img)
                                 end
@@ -671,11 +669,6 @@ get(
                             end
 
 
-                                if not allow_loaded or dad_event[i]["name"] == nil then
-                                    display.remove(img)
-                                    display.remove(stroke)
-                                    display.remove(text)
-                                end
 
 
                         end, 
@@ -822,7 +815,7 @@ get(
                         end
                     end
 
-                    update_games()
+
 
                     end)
                 end)
