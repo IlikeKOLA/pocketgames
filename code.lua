@@ -620,6 +620,7 @@ get(
                     oth:insert(exit_text)
                     exit_text:setFillColor(0)
                     exit_btn:addEventListener("touch", function(event)
+                        allow_games = true
                         if allow_games == true then
                             allow_games = false
                             inf.isVisible = false
