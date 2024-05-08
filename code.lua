@@ -216,7 +216,7 @@ local function opn_game(game)
             end
 
 
-
+                inf.isVisible = true
                  local download_btn = display.newRoundedRect(display.contentCenterX,display.contentHeight-100,180,80,20)
                  local down_text = display.newText("СКАЧАТЬ",display.contentCenterX,display.contentHeight-100)
                  down_text:setFillColor(0,0,0)
@@ -326,6 +326,7 @@ local function sortTop(event)
                     if allow_games == true then
                         gms.isVisible = false
                     end
+                    gms.isVisible = false
                     local dwns_text = display.newText(len(game.downloads) .. " Загрузок", display.contentWidth/1.15, ys[game])
                     local name_text = display.newText(game.name, display.contentWidth/2, ys[game])
                     local img = event.target
@@ -344,7 +345,8 @@ local function sortTop(event)
                         img:addEventListener("touch", function(event)
                             if event.phase == "began" then
                                 opn_game(img.name)
-                                clear_group(inf)
+                                clear_group(move_oth)
+                                gms.isVisible = false
                             end
                         end)
                     end
@@ -407,7 +409,6 @@ local function profile()
             move_oth:insert(inform)
 
             y = 0
-            print(#info_app)
 
             for i=0,#info_app/120 do
                 y = y + 50
