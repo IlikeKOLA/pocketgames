@@ -322,7 +322,9 @@ local function sortTop(event)
 
             if game["icon"] then
                 local game = display.loadRemoteImage(game.icon, "GET", function(event)
-                    gms.isVisible = false
+                    if allow_games == true then
+                        gms.isVisible = false
+                    end
                     local dwns_text = display.newText(len(game.downloads) .. " Загрузок", display.contentWidth/1.15, ys[game])
                     local name_text = display.newText(game.name, display.contentWidth/2, ys[game])
                     local img = event.target
@@ -365,14 +367,17 @@ local function sortTop(event)
     oth:insert(exit_text)
     exit_text:setFillColor(0)
     exit_btn:addEventListener("touch", function(event)
-        if allow_games == true then
-            allow_games = false
-            gms.isVisible = false
-            clear_group(inf)
-            clear_group(oth)
-            update_games()
-            dw.text = ""
-            clear_group(move_oth)
+        if event.phase == "began" then
+            allow_games = true
+            if allow_games == true then
+                allow_games = false
+                gms.isVisible = false
+                clear_group(inf)
+                clear_group(move_oth)
+                clear_group(oth)
+                update_games()
+                dw.text = ""
+            end
         end
     end)
 
