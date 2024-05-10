@@ -30,7 +30,7 @@ function SortDowns(a, b)
     end
 end
 
-display.newRect(0,0,10000,10000):setFillColor(0,0.5,1)
+display.newRect(0,0,10000,10000):setFillColor(0.3,0.5,1)
 
 local scr = display.newGroup()
 local gms = display.newGroup()
@@ -105,7 +105,7 @@ end
 end)
 local function opn_game(game)
 
-    clear_group(oth_gms)
+    oth_gms.isVisible = false
     clear_group(inf)
     clear_group(tags_group)
     display.remove(serch)
@@ -138,11 +138,54 @@ local function opn_game(game)
                     transistor = "Гугл диск"
                 end
             end
+
+            local norm = 0
+            local angree = 0
+
+            if event[game]["reacts"] then
+                for i in pairs(event[game]["reacts"]) do
+                    if event[game]["reacts"][i] == 1 then
+                        norm = norm + 1
+                    else
+                        angree = angree + 1
+                    end
+                end
+
+                local like = display.newRect(display.contentCenterX,display.contentCenterY,30,30)
+                local dike = display.newRect(display.contentCenterX+50,display.contentCenterY,30,30)
+                inf:insert(like)
+                inf:insert(dike)
+
+                like:addEventListener("touch",function(event)
+                    get("https://kritireg-default-rtdb.firebaseio.com/games.json", function(event)
+                        event = json.decode(event)
+                        if event[game]["reacts"] then
+                            event[game]["reacts"][id] = 1
+                            post(event,"games")
+                        end
+                    end)
+                end)
+
+                dike:addEventListener("touch",function(event)
+                    get("https://kritireg-default-rtdb.firebaseio.com/games.json", function(event)
+                        event = json.decode(event)
+                        if event[game]["reacts"] then
+                            event[game]["reacts"][id] = -1
+                            post(event,"games")
+                        end
+                    end)
+                end)
+
+                local react = display.newText("Понравилось "..(norm/(angree+norm)*100).."% людей",display.contentCenterX,display.contentHeight-150)
+                inf:insert(react)
+            end
+
             local dad_event = event
             for i in pairs(event) do
 
                 local transit = display.newText(transistor,display.screenOriginX+80,display.contentHeight/2.4)
                 inf:insert(transit)
+
 
                 local heght = display.newText("Вес",display.screenOriginX+80,display.contentHeight/2.2)
                 if event[game]["ves"] then
@@ -562,9 +605,7 @@ profile_btn.width, profile_btn.height = 40, 40
 profile_btn:addEventListener("touch",function(event)
 if event.phase == "began" then
     profile()
-    display.remove(profile_btn)
     profile_btn = nil
-
     end
 end)
 
@@ -592,7 +633,7 @@ get(
 
     local title2_stroke = display.newRoundedRect(display.contentWidth/3,display.contentHeight/4,display.contentWidth*1.3,display.contentHeight/10,10)
     local title2 = display.newText("Сортировать по",display.contentWidth/3,display.contentHeight/4)
-    title2_stroke:setFillColor(0.8,0.5,0)
+    title2_stroke:setFillColor(0.5,0.7,1)
     title2.size = (display.contentWidth+display.contentHeight)/45
     gms:insert(title2_stroke)
     gms:insert(title2)
@@ -711,10 +752,24 @@ get(
 
     local title1_stroke = display.newRoundedRect(display.contentWidth/3,display.contentHeight/2,display.contentWidth*1.3,display.contentHeight/10,10)
     local title1 = display.newText("Каталог приложений",display.contentWidth/3,display.contentHeight/2)
-    title1_stroke:setFillColor(0.8,0.5,0)
+    title1_stroke:setFillColor(0.5,0.7,1)
     title1.size = (display.contentWidth+display.contentHeight)/45
     gms:insert(title1_stroke)
     gms:insert(title1)
+
+    local profile_btn = display.newImage("images/profile.png",30,display.screenOriginY+40)
+    oth_gms:insert(profile_btn)
+    profile_btn.width, profile_btn.height = 40, 40
+    profile_btn:addEventListener("touch",function(event)
+    if event.phase == "began" then
+        profile()
+        display.remove(profile_btn)
+        profile_btn = nil
+
+        end
+    end)
+
+
 
 
 update_games = function()
@@ -722,6 +777,7 @@ update_games = function()
     allow_downloads_loaded = false
     allow_loaded = true
     gms.isVisible = true
+    oth_gms.isVisible = true
 
     clear_group(scr)
     clear_group(inf)
